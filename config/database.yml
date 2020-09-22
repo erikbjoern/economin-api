@@ -1,0 +1,23 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: economin_api_development
+  username: postgres
+  password: password
+
+test:
+  <<: *default
+  database: economin_api_test
+  username: postgres
+  password: password
+
+production:
+  <<: *default
+  database: economin_api_production
+  username: economin_api
+  password: <%= ENV['economin_API_DATABASE_PASSWORD'] %>
