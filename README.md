@@ -1,24 +1,8 @@
-# README
+# economin API documentation
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Endpoints
+### /api/budgets#POST
+Required params: `amount:integer, start_date:date, end_date:date`
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Responds with `{ budget: { id, amount, start_date, end_date, created_at, updated_at } }, status 200` 
+or `{ message: { *error message* } }, status 400`
