@@ -65,8 +65,9 @@ RSpec.describe 'POST /api/budgets', type: :request do
       end
     end
 
-    describe 'start_date occurring before previous end_date' do
-      let(:budget) { create(:budget, end_date: Date.today + 10)}
+    describe "start date that's occurring before last budget's end date" do
+      let!(:budget) { create(:budget, end_date: Date.today.next_year) }
+      
       before do
         post '/api/budgets', params: {
           amount: 10000,
@@ -80,11 +81,12 @@ RSpec.describe 'POST /api/budgets', type: :request do
       end
 
       it 'gives error message' do
-        expect(response_json['message']).to eq "Start date cannot be sooner than previous end date"
+        expect(response_json['message'])
+        .to eq "Start date can't be before last budget's end date, which is #{Date.today.next_year}"
       end
     end
     
-    describe 'end_date occurring before start_date' do
+    describe "end date that's occurring before start date" do
       before do
         post '/api/budgets', params: {
           amount: 10000,
@@ -98,7 +100,7 @@ RSpec.describe 'POST /api/budgets', type: :request do
       end
 
       it 'gives error message' do
-        expect(response_json['message']).to eq "End date cannot be sooner than start date"
+        expect(response_json['message']).to eq "End date can't be before start date"
       end
     end
   end
