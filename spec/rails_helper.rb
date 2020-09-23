@@ -9,6 +9,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 require 'spec_helper'
 require 'date'
+require 'support/assets/response_json'
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
@@ -24,6 +25,7 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   config.filter_gems_from_backtrace('rspec-core')
   config.include FactoryBot::Syntax::Methods
+  config.include ResponseJSON
 end
 
 Shoulda::Matchers.configure do |config|
