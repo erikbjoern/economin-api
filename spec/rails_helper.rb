@@ -2,6 +2,7 @@ require 'coveralls'
 Coveralls.wear_merged!('rails')
 
 require 'spec_helper'
+require 'date'
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
 
@@ -19,7 +20,7 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
-  # config.filter_gems_from_backtrace("gem name")
+  config.filter_gems_from_backtrace('rspec-core')
   config.include FactoryBot::Syntax::Methods
   config.include(Shoulda::Matchers::ActiveRecord, type: :model)
 end
