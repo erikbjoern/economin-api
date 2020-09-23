@@ -1,2 +1,13 @@
 class ApplicationController < ActionController::API
+  rescue_from StandardError, with: :render_error_message
+
+  def render_error_message(errors)
+    error_message = if !errors.class.method_defined?(:full_messages)
+                      errors.message
+                    else
+                      errors.full_messages.to_sentence
+                    end
+
+    render json: { message: error_message }, status: 400
+  end
 end

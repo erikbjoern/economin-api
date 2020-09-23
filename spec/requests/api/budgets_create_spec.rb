@@ -44,7 +44,7 @@ RSpec.describe 'POST /api/budgets', type: :request do
       end
 
       it 'gives error message' do
-        expect(response_json['message']).to eq "Start_date can't be blank" 
+        expect(response_json['message']).to eq "Start date can't be blank" 
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe 'POST /api/budgets', type: :request do
       end
 
       it 'gives error message' do
-        expect(response_json['message']).to eq "End_date can't be blank" 
+        expect(response_json['message']).to eq "End date can't be blank" 
       end
     end
 
