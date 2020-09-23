@@ -11,6 +11,15 @@ RSpec.describe 'POST /api/budgets', type: :request do
     it 'gives 200 status code response' do
       expect(response).to have_http_status 200
     end
+
+    it 'responds with the Budget hash' do
+      expect(response_json['budget']).to have_key 'id'
+      expect(response_json['budget']).to have_key 'amount'
+      expect(response_json['budget']).to have_key 'start_date'
+      expect(response_json['budget']).to have_key 'end_date'
+      expect(response_json['budget']).to have_key 'created_at'
+      expect(response_json['budget']).to have_key 'updated_at'
+    end
   end
 
   describe 'unsuccessfully with invalid params' do

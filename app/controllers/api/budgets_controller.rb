@@ -3,7 +3,7 @@ class Api::BudgetsController < ApplicationController
     budget = Budget.create(amount: params['amount'], start_date: params['start_date'], end_date: params['end_date'])
 
     if budget.persisted?
-      render json: {}, status: 200
+      render json: { budget: budget }, status: 200
     else
       render_error_message(budget.errors)
     end
