@@ -13,7 +13,7 @@ RSpec.describe 'GET /api/budgets', type: :request do
     end
 
     it 'returns budget for the requested period' do
-      expect(response_json['budget']).to eq budget
+      expect(response_json['budget']['id']).to eq budget.id
     end
   end
 
@@ -28,14 +28,16 @@ RSpec.describe 'GET /api/budgets', type: :request do
       end
       
       it 'gives error message' do
-        expect(response_json['error'])
+        expect(response_json['message'])
         .to eq "Please provide a date that's within the requested budget's time period, in the param 'containing_date'"
       end
     end
     
     describe "if the requested date can't be found within any budget period" do
       before do
-        get "/api/budgets"
+        get "/api/budgets", params: {
+          containing_date: Date.today.next_year
+        }
       end
         
       it 'gives 404 response' do
@@ -43,7 +45,7 @@ RSpec.describe 'GET /api/budgets', type: :request do
       end
       
       it 'gives error message' do
-        expect(response_json['error']).to eq "No budget could be found for the requested period"
+        expect(response_json['message']).to eq 'No budget could be found for the requested period'
       end
     end
   end
