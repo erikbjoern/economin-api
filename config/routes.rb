@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
   namespace :api do
-    resources :budgets, only: [:create]
+    resources :budgets, only: %i[index create]
   end
 end
