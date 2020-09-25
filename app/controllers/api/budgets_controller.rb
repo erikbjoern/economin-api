@@ -1,5 +1,6 @@
 class Api::BudgetsController < ApplicationController
   before_action :validate_and_format_requested_date, only: :index
+  before_action :authenticate_user!
 
   def index
     budget = Budget.where(
@@ -7,9 +8,7 @@ class Api::BudgetsController < ApplicationController
       @requested_date, @requested_date
     )[0]
 
-    if budget != nil
-      render json: SingleBudgetSerializer.new(budget)
-    else
+    if budget == nil
       case true
       when @requested_date == Date.today
         message = "You don't have any budget set currently"
@@ -18,13 +17,16 @@ class Api::BudgetsController < ApplicationController
       when @requested_date < Date.today
         message = "You didn't have any budget set for #{@readable_date}"
       end
-
       render json: { message: message }, status: 404
+    elsif budget.user != current_user
+      render json: { message: "You are trying to access someone else's data" }, status: 401
+    else
+      render json: SingleBudgetSerializer.new(budget)
     end 
   end
 
   def create 
-    budget = Budget.create(create_params)
+    budget = current_user.budgets.create(create_params)
 
     if budget.persisted?
       render json: SingleBudgetSerializer.new(budget)
