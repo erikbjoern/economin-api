@@ -33,6 +33,10 @@ RSpec.describe Budget, type: :model do
     end
   end
 
+  describe 'relations' do
+    it { should belong_to :user }
+  end
+
   describe 'factory' do
     it 'should have a valid factory' do
       expect(create(:budget)).to be_valid
