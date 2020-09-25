@@ -1,18 +1,25 @@
 class Api::BudgetsController < ApplicationController
-  before_action :validate_presence_of_containing_date, only: :index
+  before_action :validate_and_format_requested_date, only: :index
 
   def index
     budget = Budget.where(
       "start_date < ? AND end_date > ?", 
-      params['containing_date'], params['containing_date']
+      @requested_date, @requested_date
     )[0]
 
     if budget != nil
       render json: { budget: budget }, status: 200
     else
-      render json: { 
-         message: 'No budget could be found for the requested period' 
-      }, status: 404
+      case true
+      when @requested_date == Date.today
+        message = "You don't have any budget set currently"
+      when @requested_date > Date.today
+        message = "You don't have any budget set for #{@readable_date}"
+      when @requested_date < Date.today
+        message = "You didn't have any budget set for #{@readable_date}"
+      end
+
+      render json: { message: message }, status: 404
     end 
   end
 
@@ -28,14 +35,17 @@ class Api::BudgetsController < ApplicationController
 
   private
 
-  def validate_presence_of_containing_date
-    if params['containing_date'] == nil || params['containing_date'] == ""
+  def validate_and_format_requested_date
+    if params['requested_date'] == nil || params['requested_date'] == ""
       render json: { 
-         message: "Please provide a date that's within the requested budget's time period, in the param 'containing_date'" 
+         message: "Please provide a date that's within the time period you are looking for." 
       }, status: 400
 
       return
     end
+
+    @requested_date = Date.strptime(params['requested_date'], '%Y-%m-%d')
+    @readable_date = @requested_date.strftime("%d %b, %Y")
   end
 
   def create_params 
