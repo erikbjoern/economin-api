@@ -8,7 +8,7 @@ class Api::BudgetsController < ApplicationController
     )[0]
 
     if budget != nil
-      render json: { budget: budget }, status: 200
+      render json: SingleBudgetSerializer.new(budget)
     else
       case true
       when @requested_date == Date.today
@@ -27,7 +27,7 @@ class Api::BudgetsController < ApplicationController
     budget = Budget.create(create_params)
 
     if budget.persisted?
-      render json: { budget: budget }, status: 200
+      render json: SingleBudgetSerializer.new(budget)
     else
       render_error_message(budget.errors)
     end
