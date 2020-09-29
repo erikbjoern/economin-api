@@ -1,6 +1,7 @@
 class Budget < ApplicationRecord
   validates_presence_of :amount, :start_date, :end_date
   validate :start_date_cannot_be_before_last_budgets_end_date, :end_date_cannot_be_before_start_date
+  belongs_to :user
 
   def start_date_cannot_be_before_last_budgets_end_date
     if Budget.last == self 
